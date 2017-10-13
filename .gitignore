@@ -3,3 +3,6 @@
 /typings
 /public/js/
 npm-debug.log
+
+wwwroot/app/**/*.js
+wwwroot/app/**/*.map
