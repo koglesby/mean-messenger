@@ -16,13 +16,16 @@ export class AuthService {
           .catch((error: Response) => Observable.throw(error.json()));
         // use map to transform data we get back
     }
-  signin(user: User) {
-    const body = JSON.stringify(user);
-    // Headers let backend know getting JSON data
-    const headers = new Headers({'Content-Type': 'application/json'});
-    return this.http.post('http://localhost:3000/user/signin', body, {headers: headers})
-      .map((response: Response) => response.json())
-      .catch((error: Response) => Observable.throw(error.json()));
-    // use map to transform data we get back
-  }
+    signin(user: User) {
+        const body = JSON.stringify(user);
+        // Headers let backend know getting JSON data
+        const headers = new Headers({'Content-Type': 'application/json'});
+        return this.http.post('http://localhost:3000/user/signin', body, {headers: headers})
+            .map((response: Response) => response.json())
+            .catch((error: Response) => Observable.throw(error.json()));
+        // use map to transform data we get back
+    }
+    logout() {
+        localStorage.clear();
+    }
 }
