@@ -3,6 +3,7 @@ import { Headers, Http, Response } from '@angular/http';
 import { EventEmitter, Injectable } from '@angular/core';
 import 'rxjs/Rx'
 import { Observable } from 'rxjs/Observable';
+import { ErrorService } from '../errors/error.service';
 
 @Injectable()
 // Adds metadata to allow use of Http service
@@ -10,7 +11,7 @@ export class MessageService {
     private messages: Message[] = [];
     messageToEdit = new EventEmitter<Message>();
 
-    constructor(private http: Http) {}
+    constructor(private http: Http, private errorService: ErrorService) {}
 
     addMessage(message: Message) {
         const body = JSON.stringify(message);
@@ -30,7 +31,11 @@ export class MessageService {
             this.messages.push(message);
             return message;
           })
-          .catch((error: Response) => Observable.throw(error.json()));
+          .catch((error: Response) => {
+              this.errorService.handleError(error.json());
+              return Observable.throw(error.json());
+          });
+
         // Should be changed to domain of the real server when app is deployed
         // sets up an observable that HOLDS the request, and allow us to subscribe to any data the request will return
     }
@@ -51,7 +56,10 @@ export class MessageService {
                 this.messages = transformedMessages;
                 return transformedMessages;
             })
-            .catch((error: Response) => Observable.throw(error.json()));
+            .catch((error: Response) => {
+                this.errorService.handleError(error.json());
+                return Observable.throw(error.json());
+            });
     }
 
     editMessage(message: Message) {
