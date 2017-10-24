@@ -19,9 +19,12 @@ export class MessageService {
         const token = localStorage.getItem('token')
             ? '?token=' + localStorage.getItem('token')
             : '';
+        // in app.js we use /message linked to messages.js in routes
+        // Send post req with token, body (with the message in it)
         return this.http.post('http://localhost:3000/message' + token, body, {headers: headers})
           .map((response: Response) => {
             const result = response.json();
+            console.log('message service addMessage(message)' + result);
             const message = new Message(
               result.obj.content,
               result.userName,

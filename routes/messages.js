@@ -33,8 +33,9 @@ router.use('/', function(req, res, next) {
     })
 });
 
-// only get here from /messages url
 router.post('/', function (req, res, next) {
+    // extract the token from the req query,
+
     var decoded = jwt.decode(req.query.token);
     User.findById(decoded.user._id, function(err, user) {
         if (err) {
@@ -56,7 +57,7 @@ router.post('/', function (req, res, next) {
             }
             user.messages.push(result);
             user.save();
-            res.status(201).json({
+            res.status(200).json({
                 message: 'Saved the message',
                 obj: result,
                 userName: user.firstName
