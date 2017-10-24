@@ -2,12 +2,11 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 var User = require('../models/user');
-
 var Message = require('../models/message');
 
 router.get('/', function(req, res, next) {
     Message.find()
-      .populate('user', 'firstName')
+        .populate('user', 'firstName')
         .exec(function(err, messages) {
             if (err) {
                 return res.status(500).json({
@@ -19,7 +18,7 @@ router.get('/', function(req, res, next) {
                 message: 'Success',
                 obj: messages
             });
-        })
+        });
 });
 
 router.use('/', function(req, res, next) {
@@ -46,7 +45,7 @@ router.post('/', function (req, res, next) {
         }
         var message = new Message({
             content: req.body.content,
-            user: user._id
+            user: user
         });
         message.save(function(err, result) {
             if (err) {
@@ -56,11 +55,11 @@ router.post('/', function (req, res, next) {
                 });
             }
             user.messages.push(result);
+            user.save();
             res.status(201).json({
                 message: 'Saved the message',
                 obj: result
             });
-            user.save();
         });
     });
 
