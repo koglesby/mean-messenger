@@ -24,9 +24,9 @@ export class MessageService {
             const result = response.json();
             const message = new Message(
               result.obj.content,
-              result.obj.user.firstName,
+              result.userName,
               result.obj._id,
-              result.obj.user._id
+              result.obj.user
             );
             this.messages.push(message);
             return message;
@@ -79,7 +79,7 @@ export class MessageService {
 
     deleteMessage(message: Message) {
         this.messages.splice(this.messages.indexOf(message), 1);
-      const token = localStorage.getItem('token')
+        const token = localStorage.getItem('token')
         ? '?token=' + localStorage.getItem('token')
         : '';
         return this.http.delete('http://localhost:3000/message/' + message.messageId + token)
